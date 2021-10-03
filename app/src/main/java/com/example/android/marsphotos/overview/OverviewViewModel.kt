@@ -40,7 +40,7 @@ class OverviewViewModel : ViewModel() {
     }
 
     /**
-    Получаем информацию о фотографиях Марса из службы Retrofit Mars API и обновляем [MarsPhoto] [List] [LiveData].
+    Получаем информацию о фотографиях Марса из MarsApi.retrofitService и обновляем ее.
      */
     private fun getMarsPhotos() {
         //запустите сопрограмму, используя viewModelScope.launch
@@ -49,7 +49,7 @@ class OverviewViewModel : ViewModel() {
             try {
                 //Сохраните полученный ответ  от сервера в val listResult
                 val listResult = MarsApi.retrofitService.getPhotos()
-                _status.value = listResult
+                _status.value = "Успех: ${listResult.size} фотографий Марса получено"
                 //в случае ошибки запроса на сервер - выводим ошибку на экран
             } catch (e: Exception) {
                 _status.value = "Сбой: ${e.message}"

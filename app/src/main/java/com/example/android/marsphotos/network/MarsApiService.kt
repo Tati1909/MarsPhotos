@@ -1,21 +1,28 @@
 package com.example.android.marsphotos.network
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
 //базовый URI для веб-службы
 private const val BASE_URL =
     "https://android-kotlin-fun-mars-server.appspot.com"
 
-// конструктор Retrofit для построения и создания объекта Retrofit.
-//Для модернизации требуется базовый URI для веб-службы и ConverterFactory для создания API.
-// ConverterFactory сообщает Retrofit, что делать с данными, которые он получает от веб-службы.
+//создаем объект Moshi, аналогичный объекту Retrofit
+private val moshi = Moshi.Builder()
+    .add(KotlinJsonAdapterFactory())
+    .build()
+
+// Конструктор Retrofit для построения и создания объекта Retrofit.
+//Для модернизации требуется базовый URI для веб-службы и MoshiConverterFactory для создания API.
+// MoshiConverterFactory сообщает Retrofit, что делать с данными, которые он получает от веб-службы.
 // В этом случае вы хотите, чтобы Retrofit получал ответ JSON от веб-службы и возвращал его как файл String.
-// Retrofit имеет объект ScalarsConverter, поддерживающий строки и другие примитивные типы, поэтому
-// вы вызываете Builder().addConverterFactory с экземпляром ScalarsConverterFactory.
+// Retrofit имеет объект Converter, поддерживающий строки и другие примитивные типы, поэтому
+// вы вызываете Builder().addConverterFactory с экземпляром MoshiConverterFactory.
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     //добавляем базовый URI
     .baseUrl(BASE_URL)
     // вызоваем build() для создания объекта Retrofit.
@@ -25,9 +32,9 @@ private val retrofit = Retrofit.Builder()
 interface MarsApiService {
     //аннотация, чтобы сообщить Retrofit, что это запрос GET, и укажите конечную точку для этого метода веб-службы - /photos.
     @GET("photos")
-    //функция для получения строки ответа от веб-службы
-    //функцию suspend, чтобы вы могли вызывать этот метод из сопрограммы.
-    suspend fun getPhotos(): String
+    //функция для получения списка объектов MarsPhoto от веб-службы
+    //функция suspend, чтобы мы могли вызывать этот метод из сопрограммы.
+    suspend fun getPhotos(): List<MarsPhoto>
 }
 
 //Шаблон синглтона гарантирует, что создается один и только один экземпляр объекта,
