@@ -46,9 +46,14 @@ class OverviewViewModel : ViewModel() {
         //запустите сопрограмму, используя viewModelScope.launch
         //launch - запускать
         viewModelScope.launch {
-            //Сохраните полученный ответ  от сервера в val listResult
-            val listResult = MarsApi.retrofitService.getPhotos()
-            _status.value = listResult
+            try {
+                //Сохраните полученный ответ  от сервера в val listResult
+                val listResult = MarsApi.retrofitService.getPhotos()
+                _status.value = listResult
+                //в случае ошибки запроса на сервер - выводим ошибку на экран
+            } catch (e: Exception) {
+                _status.value = "Сбой: ${e.message}"
+            }
         }
     }
 }
