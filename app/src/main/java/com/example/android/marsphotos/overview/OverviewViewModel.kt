@@ -38,7 +38,7 @@ class OverviewViewModel : ViewModel() {
     val photos: LiveData<MarsPhoto> = _photos
 
     /**
-    Вызов getMarsPhotos() при инициализации, чтобы мы могли немедленно отобразить статус.
+    Вызов getMarsPhotos() при инициализации, чтобы мы могли немедленно отобразить фото.
      */
     init {
         getMarsPhotos()
@@ -55,7 +55,7 @@ class OverviewViewModel : ViewModel() {
                 // Сохраняем первую полученную фотографию Марса в новую переменную _photos
                 _photos.value = MarsApi.retrofitService.getPhotos()[0]
                 _status.value =
-                    " Отображение URL-адреса первого изображения из списка фотографий : ${_photos.value!!.imgSrcUrl}"
+                    "Отображение URL-адреса первого фото из списка фотографий: ${_photos.value!!.imgSrcUrl}"
                 //в случае ошибки запроса на сервер - выводим ошибку на экран
             } catch (e: Exception) {
                 _status.value = "Сбой: ${e.message}"
