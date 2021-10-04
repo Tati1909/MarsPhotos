@@ -21,6 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.marsphotos.network.MarsApi
+import com.example.android.marsphotos.network.MarsPhoto
 import kotlinx.coroutines.launch
 
 
@@ -32,8 +33,12 @@ class OverviewViewModel : ViewModel() {
     // Внешняя неизменяемая LiveData для статуса запроса
     val status: LiveData<String> = _status
 
+    //загрузка фото
+    private val _photos = MutableLiveData<MarsPhoto>()
+    val photos: LiveData<MarsPhoto> = _photos
+
     /**
-    Вызов getMarsPhotos() при инициализации, чтобы мы могли немедленно отобразить статус.
+    Вызов getMarsPhotos() при инициализации, чтобы мы могли немедленно отобразить фото.
      */
     init {
         getMarsPhotos()
@@ -47,9 +52,10 @@ class OverviewViewModel : ViewModel() {
         //launch - запускать
         viewModelScope.launch {
             try {
-                //Сохраните полученный ответ  от сервера в val listResult
-                val listResult = MarsApi.retrofitService.getPhotos()
-                _status.value = "Успех: ${listResult.size} фотографий Марса получено"
+                // Сохраняем первую полученную фотографию Марса в новую переменную _photos
+                _photos.value = MarsApi.retrofitService.getPhotos()[0]
+                _status.value =
+                    "Отображение URL-адреса первого фото из списка фотографий: ${_photos.value!!.imgSrcUrl}"
                 //в случае ошибки запроса на сервер - выводим ошибку на экран
             } catch (e: Exception) {
                 _status.value = "Сбой: ${e.message}"
