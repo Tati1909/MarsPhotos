@@ -20,14 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.marsphotos.databinding.FragmentOverviewBinding
 
 /**
  * This fragment shows the the status of the Mars photos web services transaction.
  */
-class OverviewFragment : Fragment() {
+class OverviewFragment : androidx.fragment.app.Fragment() {
 
     private val viewModel: OverviewViewModel by viewModels()
 
@@ -44,8 +43,10 @@ class OverviewFragment : Fragment() {
         //Разрешает привязке данных наблюдать за LiveData в течение жизненного цикла этого фрагмента
         binding.lifecycleOwner = this@OverviewFragment
 
-       //Предоставляем привязке доступ к OverviewViewModel
+        //Предоставляем привязке доступ к OverviewViewModel
         binding.viewModel = viewModel
+
+        binding.photosGrid.adapter = PhotoGridAdapter()
 
         return binding.root
     }
