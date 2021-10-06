@@ -24,16 +24,21 @@ import com.example.android.marsphotos.network.MarsApi
 import com.example.android.marsphotos.network.MarsPhoto
 import kotlinx.coroutines.launch
 
+//статусы приложения
+//Следует учитывать три состояния: загрузка, успех и неудача. Состояние загрузки происходит, пока вы ждете данных.
+// Статус успеха - это когда мы успешно извлекаем данные из веб-сервиса.
+// Состояние сбоя указывает на любые ошибки сети или подключения.
+enum class MarsApiStatus { LOADING, ERROR, DONE }
 
 class OverviewViewModel : ViewModel() {
 
     //Внутренняя MutableLiveData, в котором хранится статус самого последнего запроса
-    private val _status = MutableLiveData<String>()
+    private val _status = MutableLiveData<MarsApiStatus>()
 
     // Внешняя неизменяемая LiveData для статуса запроса
-    val status: LiveData<String> = _status
+    val status: LiveData<MarsApiStatus> = _status
 
-    //загрузка фото
+    //наш список с фотками
     private val _photos = MutableLiveData<List<MarsPhoto>>()
     val photos: LiveData<List<MarsPhoto>> = _photos
 
@@ -51,13 +56,18 @@ class OverviewViewModel : ViewModel() {
         //запустите сопрограмму, используя viewModelScope.launch
         //launch - запускать
         viewModelScope.launch {
+            //начальный статус - загрузка, когда сопрограмма работает, а мы ждем данные
+            _status.value = MarsApiStatus.LOADING
             try {
                 // Сохраняем список полученных фото Марса в новую переменную _photos
                 _photos.value = MarsApi.retrofitService.getPhotos()
-                _status.value = "Успех: свойства Марса получены"
+                _status.value = MarsApiStatus.DONE
                 //в случае ошибки запроса на сервер - выводим ошибку на экран
             } catch (e: Exception) {
-                _status.value = "Сбой: ${e.message}"
+                //посредине экрана будет поломанное облачко и белый фон
+                _status.value = MarsApiStatus.ERROR
+                //установим _photos как пустой список. Это очищает RecyclerView.
+                _photos.value = listOf()
             }
         }
     }

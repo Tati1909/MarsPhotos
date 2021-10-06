@@ -20,24 +20,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.marsphotos.databinding.FragmentOverviewBinding
 
 /**
  * This fragment shows the the status of the Mars photos web services transaction.
  */
-class OverviewFragment : androidx.fragment.app.Fragment() {
+class OverviewFragment : Fragment() {
 
     private val viewModel: OverviewViewModel by viewModels()
 
     /**
-    Раздувает макет с помощью binding, устанавливает его владельца жизненного цикла на OverviewFragment,
-    чтобы включить binding для наблюдения за LiveData, и настраивает RecyclerView с адаптером.
+    Раздуваем макет с помощью binding, устанавливаем ему владельца жизненного цикла самогос себя (OverviewFragment),
+    чтобы включить наблюдение за LiveData, и настраиваем RecyclerView с адаптером.
      */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val binding = FragmentOverviewBinding.inflate(inflater)
 
         //Разрешает привязке данных наблюдать за LiveData в течение жизненного цикла этого фрагмента
@@ -46,7 +48,8 @@ class OverviewFragment : androidx.fragment.app.Fragment() {
         //Предоставляем привязке доступ к OverviewViewModel
         binding.viewModel = viewModel
 
-        binding.photosGrid.adapter = PhotoGridAdapter()
+        //Привязываем адаптер к нашему списку
+        binding.photosGridRecyclerView.adapter = PhotoGridAdapter()
 
         return binding.root
     }

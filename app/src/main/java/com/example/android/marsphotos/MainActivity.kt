@@ -20,7 +20,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * MainActivity sets the content view activity_main, a fragment container that contains
+ * MainActivity устанавливает макет activity_main, контейнер фрагмента, который содержит
  * overviewFragment.
  */
 class MainActivity : AppCompatActivity() {
