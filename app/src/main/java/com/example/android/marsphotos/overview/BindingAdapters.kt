@@ -3,8 +3,10 @@ package com.example.android.marsphotos.overview
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.android.marsphotos.R
+import com.example.android.marsphotos.network.MarsPhoto
 
 //Мы должны установить в макете для атрибута app:imageUrl значение ImageView.
 //Для этого мы будем использовать адаптеры привязки (аннотированные методы).
@@ -21,5 +23,11 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
             placeholder(R.drawable.loading_animation)
             error(R.drawable.ic_broken_image)
         }
+    }
+
+    @BindingAdapter("listData")
+    fun bindRecyclerView(recyclerView: RecyclerView, data: List<MarsPhoto>?) {
+        val adapter = recyclerView.adapter as PhotoGridAdapter
+        adapter.submitList(data)
     }
 }

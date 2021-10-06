@@ -34,8 +34,8 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<String> = _status
 
     //загрузка фото
-    private val _photos = MutableLiveData<MarsPhoto>()
-    val photos: LiveData<MarsPhoto> = _photos
+    private val _photos = MutableLiveData<List<MarsPhoto>>()
+    val photos: LiveData<List<MarsPhoto>> = _photos
 
     /**
     Вызов getMarsPhotos() при инициализации, чтобы мы могли немедленно отобразить фото.
@@ -52,10 +52,9 @@ class OverviewViewModel : ViewModel() {
         //launch - запускать
         viewModelScope.launch {
             try {
-                // Сохраняем первую полученную фотографию Марса в новую переменную _photos
-                _photos.value = MarsApi.retrofitService.getPhotos()[0]
-                _status.value =
-                    "Отображение URL-адреса первого фото из списка фотографий: ${_photos.value!!.imgSrcUrl}"
+                // Сохраняем список полученных фото Марса в новую переменную _photos
+                _photos.value = MarsApi.retrofitService.getPhotos()
+                _status.value = "Успех: свойства Марса получены"
                 //в случае ошибки запроса на сервер - выводим ошибку на экран
             } catch (e: Exception) {
                 _status.value = "Сбой: ${e.message}"
