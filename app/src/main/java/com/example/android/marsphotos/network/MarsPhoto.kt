@@ -17,6 +17,6 @@ data class MarsPhoto(
     //Обратите внимание, что каждая из переменных соответствует имени ключа в объекте JSON.
     //В соглашении Kotlin для переменных используются буквы верхнего и нижнего регистра («верблюжий регистр» ),
     //поэтому заменяем img_src на imgSrcUrl с помощью аннотации @Json.
-    val id: String,
+    @Json(name = "id") val id: String,
     @Json(name = "img_src") val imgSrcUrl: String
 )

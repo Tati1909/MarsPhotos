@@ -34,7 +34,6 @@ class OverviewViewModel : ViewModel() {
 
     //Внутренняя MutableLiveData, в котором хранится статус самого последнего запроса
     private val _status = MutableLiveData<MarsApiStatus>()
-
     // Внешняя неизменяемая LiveData для статуса запроса
     val status: LiveData<MarsApiStatus> = _status
 

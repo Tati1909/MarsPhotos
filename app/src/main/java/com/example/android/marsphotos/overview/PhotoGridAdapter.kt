@@ -59,8 +59,8 @@ class PhotoGridAdapter : ListAdapter<MarsPhoto,
         RecyclerView.ViewHolder(binding.root) {
 
         //привязать/задать значения
-        fun bind(MarsPhoto: MarsPhoto) {
-            binding.photo = MarsPhoto
+        fun bind(marsPhoto: MarsPhoto) {
+            binding.photo = marsPhoto
             //executePendingBindings() приводит к немедленному выполнению обновления
             binding.executePendingBindings()
         }
